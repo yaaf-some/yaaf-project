@@ -11,6 +11,18 @@ cite decisions as `PLAN.md D<n>`. Numbers are never reused: rows carried over fr
 at D47. **Status of this version: a proposal.** The rows marked *proposed* and the questions marked **?** are for the
 owner to settle before stage 1 starts.
 
+## Now
+
+*Update this block at the end of every session, on any machine; it is the first thing a new session reads.*
+
+- **Date:** 2026-10-22. **Branch and PR:** `claude/yaaf-cloud-migration-lsl4lq`, draft [#50](https://github.com/ya11so22/yaaf-project/pull/50)
+  (the plan, the offline account root, the research records). Not merged: waiting on the owner's yes or no on the plan.
+- **In AWS:** nothing. No resource has been created; the Free plan opened 2026-10-12 and ends 2027-04-12 (D58).
+- **Where the work runs (D59):** the owner's Mac for AWS and Kubernetes work once the "Mac ready" checklist is ticked (stage 2a);
+  Claude cloud sessions and the phone for code, review and planning. Until then CloudShell for applies.
+- **Next:** the owner answers the Mac's chip and macOS, and the Claude plan; an agent then makes the Mac bootstrap PR
+  (`scripts/bootstrap`, a lockfile covering the Mac, `kind` pinned). After that, the owner's first apply of `infra/account`.
+
 ## What this is
 
 A fictional online store, run the way a small company would run it, built by one person to learn and to show the work. The
@@ -228,6 +240,12 @@ Each stage ends with evidence a reviewer can open. Costs are for the stage's own
 - [x] The AWS Knowledge MCP is wired through `.mcp.json` (docs, pricing facts and regional availability; no credentials)
 - [ ] Owner, in AWS Settings: confirm the project Region, the account creation date and the credits left; Cost Explorer on; a
       Budgets alert at half the credits
+- [ ] **The "Mac ready" checklist (D59),** from the 2026-10-22 research: the owner says the Mac's chip and macOS and the Claude
+      plan; an agent makes one PR with `scripts/bootstrap`, a `mise.lock` that covers the Mac (`macos-x64` is missing today),
+      `kind` pinned, and a decision on `mise.toml`'s project-local AWS paths; the owner installs Claude Code and a container runtime
+      (Docker Desktop is free for an individual), runs `scripts/bootstrap` and `mise run check`, and proves a kind node reports
+      `cgroup2fs`; the agent is fenced from `~/.aws` in the checked-in settings and a probe confirms it; Remote Control and the phone
+      app are set up. Applies then run in the owner's own terminal, with no agent session open while the sign-in is live
 - [ ] Owner: the full Agent Toolkit setup (`aws login`, `aws configure agent-toolkit`), later, when a read-only identity exists
 - [x] The account root, `infra/account/` (2026-10-13): the state bucket, the permissions boundary and the deployer role, with
       4 offline tests (mock provider, no credentials) in `scripts/check`, each shown to fail on a planted fault; Trivy passes
@@ -333,6 +351,9 @@ Each stage ends with evidence a reviewer can open. Costs are for the stage's own
 - **? The overall plan.** The owner confirms the proposed decisions D47 to D51 as a whole, or changes them.
 - **? Credits and the upgrade.** Whether unused credits survive the upgrade (the page is silent). Decides whether to spend the
   credits down before the upgrade. The six-month deadline is now known (D58), so this no longer blocks anything.
+- **? The Mac and the Claude plan.** The Mac's chip (Apple silicon or Intel) and macOS version, and the owner's Claude plan
+  (Remote Control and cloud sessions need Pro or above; Dispatch needs Pro or Max). Decides the lockfile platform and which
+  phone features exist.
 - **? A read-only identity.** Whether the new experience offers a read-only team-member role, for the supervised Agent Toolkit.
 
 ## Decisions
@@ -370,7 +391,10 @@ Each stage ends with evidence a reviewer can open. Costs are for the stage's own
 | <a id="d56"></a>D56 | Until then OpenTofu applies run **owner-at-keyboard in AWS CloudShell**; a cloud session gets AWS credentials only by the owner's own `aws login`, never stored, for that session's life. *Decided 2026-10-13* | CloudShell is free and already signed in as the owner, so no key exists anywhere; the full Agent Toolkit setup follows when a read-only identity does |
 | <a id="d57"></a>D57 | The AWS Knowledge MCP is wired through the committed `.mcp.json` | Documentation, pricing facts and regional availability for agents with no credentials; it cannot touch an account. *Decided 2026-10-13* |
 | <a id="d58"></a>D58 | The Free-plan clock is fixed: the account opened on 2026-10-12, so the six-month period ends 2027-04-12 and the 90-day upgrade window follows. The upgrade happens by 2027-04-01 at the latest, or earlier if the credits run out. *Decided 2026-10-13 from the owner's answer* | AWS's Free terms end the account at six months or when credits are exhausted, and delete it 90 days later if not upgraded; a date is easier to keep than a trigger |
-| <a id="d59"></a>D59 | The work is hybrid: cloud sessions for code, offline tests and review, with no AWS credentials; applies by the owner from CloudShell until the owner's laptop is declared ready, then from the laptop. The owner declares when the laptop may start applying. *Decided 2026-10-13* | A laptop keeps its credentials in one place the owner controls and can run long applies; the cloud holds none. The research found CloudShell's 12-hour and 20-minute limits make it a fallback, not the main place |
+| <a id="d59"></a>D59 | The work is hybrid, and the owner's Mac is the **primary workbench for anything that touches AWS or needs Kubernetes**, once the "Mac ready" checklist in stage 2a is ticked; Claude cloud sessions and the phone stay the default for code, review and planning, and the fallback when the Mac is off. The repository is the only memory (a **Now** block in this file). Until the Mac is ready, applies run from CloudShell (D56). *Decided 2026-10-13; amended 2026-10-22 on the owner's instruction to return to the Mac* | The cloud container is cgroup v1 (measured 2026-10-22), so Kubernetes 1.35+ cannot run in it, and its AWS sign-in dies with the VM; a Mac has both a usable kernel and a place the owner's sign-in can live. It cannot be the only place, since Remote Control works only while the Mac is awake ([research](docs/research/2026-10-22-work-environment-local-vs-cloud.md)) |
+| <a id="d60"></a>D60 | *Proposed:* a Mac session sign-in is never open while an unfenced agent session runs: AWS applies run in the owner's own terminal, and the checked-in settings deny the agent `~/.aws` | Claude's sandbox allows reads of `~/.aws` unless told otherwise, and an agent runs as the owner's Mac user ([research](docs/research/2026-10-22-work-environment-local-vs-cloud.md)); D49 must hold on the Mac by settings, not only in the cloud by distance |
+| <a id="d61"></a>D61 | *Proposed:* the project is resumable from any place: this file's **Now** block, a `scripts/bootstrap` that the cloud hook and the owner both run, and nothing that matters kept on one machine (auto memory does not travel) | Cloud VMs are reclaimed and a Mac can be off, so the repository must carry every fact a new session needs |
+| <a id="d62"></a>D62 | *Proposed:* `mise.lock` covers every platform that runs the tools, and `kind` is pinned in `mise.toml` so the Mac and CI cannot drift | `mise install --locked` fails on a platform with no lock entry; kind is already what the CI environment uses |
 
 **Retired with the Floci era** (readable at the archive tag): D20, D21 (the engagement is restated above), D22, D30 to D32,
 D34, D39, D40, D42 to D44, D46.
@@ -382,3 +406,4 @@ One line per merged change. Earlier history is at the tags `archive/windows-era`
 - 2026-10-08: the plan rewritten from scratch for real AWS on a tight budget (proposal; research in `docs/research/2026-10-08-rebuild-research.md`)
 - 2026-10-13: the account is a project in the new AWS experience on the Free plan: D52 amended, D55 to D59, stage 2a; the AWS Knowledge MCP wired (`.mcp.json`)
 - 2026-10-13: the account root (`infra/account/`): the state bucket, the permissions boundary and the deployer role, offline-tested; not applied
+- 2026-10-22: the work environment researched (Mac versus Claude cloud versus hybrid); D59 amended, D60 to D62 proposed, a Now block added
