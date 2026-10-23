@@ -25,7 +25,9 @@ RUN apt-get -qq update \
 
 # get packages
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+# Modified by yaaf-project, 2026-10-23: pip 26.2.2 vendors certifi 2026.10.19 (GHSA-6q48-6c7w-9gw2); the base image's pip 26.2.1 vendors 2026.6.17.
+RUN pip install --upgrade 'pip>=26.2.2' \
+    && pip install -r requirements.txt
 
 FROM base
 # Enable unbuffered logging
