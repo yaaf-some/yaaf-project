@@ -16,8 +16,9 @@ A shop (Google's Online Boutique, vendored in `app/`) delivered to Kubernetes by
 
 ## AWS and money
 
-- Only the owner creates or changes anything in AWS, from their own terminal. Agents hold no AWS credentials, never run
-  `aws login`, and never read `~/.aws` (denied in `.claude/settings.json`). If an AWS sign-in is visible, stop and say so.
+- Only the owner creates or changes anything in AWS, from their own terminal. Agents hold no AWS credentials and never run
+  the `aws` CLI or read `~/.aws` (both denied in `.claude/settings.json`; a script that opens the files itself is only
+  blocked if the sandbox is on). If an AWS sign-in is visible, stop and say so.
 - The account is on the Free plan and its credit is the spending cap. Anything billable is written down with a cost
   estimate before it exists. Never suggest a second account. Anything that needs a card is asked about first.
 - The AWS Knowledge MCP (`.mcp.json`) is allowed: documentation only.

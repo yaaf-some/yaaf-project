@@ -1,6 +1,6 @@
 {
   "permissions": {
-    "deny": ["Read(~/.aws/**)"]
+    "deny": ["Read(~/.aws/**)", "Bash(aws *)"]
   },
   "sandbox": {
     "filesystem": {
