@@ -1,11 +1,8 @@
-# One file for tool versions, shared values and tasks (PLAN.md D25). CI installs the same file from mise.lock.
+# Tool versions, shared values and tasks. CI installs the same file from mise.lock.
 # Bump deliberately in a chore/ PR: `mise upgrade --bump`, then `mise lock`.
 
 [tools]
-opentofu = "1.13.1"
 kubectl = "1.36"
-awscli = "2"
-gh = "2"
 actionlint = "1.7.12"
 gitleaks = "8.30.1"
 zizmor = "1.30.1"
@@ -13,26 +10,12 @@ kubeconform = "0.8.0"
 trivy = "0.75.0"
 
 [vars]
-# The Kubernetes minor EKS offers, and the k3s image Floci runs for it (Floci does no version mapping, PLAN.md D22).
+# The Kubernetes minor the manifests are validated against.
 k8s_version = "1.36"
-k3s_image = "rancher/k3s:v1.36.4-k3s1"
-# The host port of the ingress listener (the shop, Argo CD). Inside Floci the listener is on 8080; publishing it as 18080
-# keeps the host's 8080 free, and the demo tunnel points here (docs/guides/cloudflare-tunnel-and-access.md).
-ingress_port = "18080"
 
 [env]
-K3S_IMAGE = "{{ vars.k3s_image }}"
 K8S_VERSION = "{{ vars.k8s_version }}"
-INGRESS_PORT = "{{ vars.ingress_port }}"
-TF_VAR_kubernetes_version = "{{ vars.k8s_version }}"
-# The project's own AWS CLI and kubectl configuration, so its commands never read or change the owner's ~/.aws or
-# ~/.kube, and can never pick up real AWS credentials by accident (the emulator is the only AWS here). The profile is
-# named on each command (`--profile floci`), not set here: the AWS provider fails if a named profile does not exist yet,
-# and `up` only writes it after the foundation root.
-AWS_CONFIG_FILE = "{{ config_root }}/.aws/config"
-AWS_SHARED_CREDENTIALS_FILE = "{{ config_root }}/.aws/credentials"
-KUBECONFIG = "{{ config_root }}/.kube/config"
 
 [tasks.check]
-description = "The fast checks (PLAN.md D9); CI runs the same script with --ci"
+description = "The fast checks; CI runs the same script with --ci"
 run = "bash scripts/check"

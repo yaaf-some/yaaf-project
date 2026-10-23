@@ -1,5 +1,5 @@
-# Traefik, the gateway controller behind the ALB (PLAN.md D22, PLAN.md D29), from its official Helm chart. A NodePort service on
-# 30080, which is what the ALB's target group points at. After the Gateway API CRDs (wave -1).
+# Traefik, the gateway controller, from its official Helm chart. A NodePort service on 30080 (the retired Floci setup
+# pointed an ALB at it; it will be rewired for kind). After the Gateway API CRDs (wave -1).
 #
 # The chart creates the GatewayClass `traefik` and the Gateway `traefik-gateway`: one HTTP listener on Traefik's `web` entry
 # point (port 8000, the container port behind NodePort 30080) that accepts routes from every namespace, so each service owns

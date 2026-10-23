@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Writes the image pins in a kustomization: every service's content-hash tag on GHCR, and with --verify its digest
-# (PLAN.md D23, PLAN.md D24). The pins live in git so Argo CD deploys exactly what is committed.
+# Writes the image pins in a kustomization: every service's content-hash tag on GHCR, and with --verify its digest.
+# The pins live in git so Argo CD deploys exactly what is committed.
 #   usage: bump-images.sh <kustomization-dir> [rev] [--verify]
 # rev selects the source revision the tags are computed from (default HEAD). --verify looks each tag up on the registry
 # and pins its digest too (rendered as name:tag@sha256:...), so a pin can never point at an image that was not built,
 # and a tag moved later cannot change what runs.
-# IMAGE_PREFIX overrides the registry path (default ghcr.io/ya11so22/yaaf-project).
+# IMAGE_PREFIX overrides the registry path (default ghcr.io/yaaf-some/yaaf-project).
 # DIGEST_RESOLVER overrides the lookup: a command given image:tag that prints its digest (tests use a stub).
 set -euo pipefail
 
@@ -17,7 +17,7 @@ for arg in "$@"; do
   if [ "$arg" = "--verify" ]; then verify=true; else rev="$arg"; fi
 done
 
-prefix="${IMAGE_PREFIX:-ghcr.io/ya11so22/yaaf-project}"
+prefix="${IMAGE_PREFIX:-ghcr.io/yaaf-some/yaaf-project}"
 upstream="us-central1-docker.pkg.dev/online-boutique-ci/microservices-demo"
 here="$(cd "$(dirname "$0")" && pwd)"
 file="$dir/kustomization.yaml"

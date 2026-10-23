@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
-# Bumps the dev image pins and opens (or updates) the pull request for them (PLAN.md D23).
+# Bumps the dev image pins and opens (or updates) the pull request for them.
 #   usage: bump-pr.sh
 # Env: BOT_NAME, BOT_EMAIL   commit identity (the GitHub App's bot user)
 #      GH_TOKEN              the App's installation token (needed unless DRY_RUN is set)
-#      BUMP_BRANCH           branch to use (default bot/bump-images: one open PR, updated in place)
 #      VERIFY                "false" skips checking that each tag is on the registry (tests only)
 #      DRY_RUN               non-empty: commit locally, but push nothing and open no PR
 set -euo pipefail
 
 : "${BOT_NAME:?BOT_NAME is required}" "${BOT_EMAIL:?BOT_EMAIL is required}"
-branch="${BUMP_BRANCH:-bot/bump-images}"
+branch="bot/bump-images"
 dir="deploy/dev"
 verify=(--verify)
 if [ "${VERIFY:-true}" = "false" ]; then verify=(); fi
@@ -45,7 +44,7 @@ number="$(gh pr list --head "$branch" --state open --json number --jq '.[0].numb
 if [ -z "$number" ]; then
   url="$(gh pr create --base main --head "$branch" \
     --title "Bump dev image pins" \
-    --body "Automated by the bump-images workflow (PLAN.md D23). Argo CD deploys the pins on merge. To roll back, revert the source change that caused the problem: pins are derived from the source, so reverting only this PR is undone by the next bump.")"
+    --body "Automated by the bump-images workflow. Argo CD deploys the pins on merge. To roll back, revert the source change that caused the problem: pins are derived from the source, so reverting only this PR is undone by the next bump.")"
   number="${url##*/}"
   echo "Opened $url"
 else

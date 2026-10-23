@@ -1,4 +1,12 @@
 {
+  "permissions": {
+    "deny": ["Read(~/.aws/**)", "Bash(aws *)"]
+  },
+  "sandbox": {
+    "filesystem": {
+      "denyRead": ["~/.aws"]
+    }
+  },
   "hooks": {
     "SessionStart": [
       {

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# The project's fast checks (PLAN.md D9, PLAN.md D25). One script, used by the pre-commit hook, `mise run check` and CI, so
+# The project's fast checks. One script, used by the pre-commit hook, `mise run check` and CI, so
 # the three cannot drift. The tools are the locked versions from mise.toml (no Docker needed).
 #
 #   scripts/check         staged-changes secret scan; a missing tool is reported as SKIP
@@ -55,13 +55,9 @@ needs() { # tool, name, command...
   if command -v "$tool" >/dev/null 2>&1; then run "$name" "$@"; else unavailable "$name" "$tool not installed"; fi
 }
 
-needs tofu "tofu fmt" tofu fmt -check -recursive -diff infra
-
 run "change-detection tests" bash .github/scripts/changed-services.test.sh
-run "changed-paths tests" bash .github/scripts/changed-paths.test.sh
 run "content-tag tests" bash .github/scripts/content-tag.test.sh
 run "bump pull request tests" bash .github/scripts/bump-pr.test.sh
-run "sandbox guard tests" bash scripts/sandbox.test.sh
 needs kubectl "image pin tests" bash .github/scripts/bump-images.test.sh
 
 # Every kustomize directory under deploy/ renders, and what it renders is valid against the Kubernetes schemas of the
@@ -70,19 +66,16 @@ needs kubectl "image pin tests" bash .github/scripts/bump-images.test.sh
 CRD_SCHEMAS='https://raw.githubusercontent.com/datreeio/CRDs-catalog/4c8dc296d32b06d15ccde9668ff136c951f4d539/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
 validate_manifests() {
   local dir rc=0
+  command -v kubectl >/dev/null 2>&1 || { echo "kubectl not installed" >&2; return 1; }
   for dir in deploy/*/; do
     kubectl kustomize "$dir" | kubeconform -strict -summary -kubernetes-version "$K8S_VERSION.0" \
       -schema-location default -schema-location "$CRD_SCHEMAS" - || rc=1
   done
   return $rc
 }
-if command -v kubectl >/dev/null 2>&1; then
-  needs kubeconform "manifest schemas" validate_manifests
-else
-  unavailable "manifest schemas" "kubectl not installed"
-fi
+needs kubeconform "manifest schemas" validate_manifests
 
-# Workflow security (PLAN.md D24). Online in CI when a token is present, which adds the audits that ask GitHub (impostor
+# Workflow security. Online in CI when a token is present, which adds the audits that ask GitHub (impostor
 # commits, actions with known vulnerabilities); offline otherwise.
 zizmor_check() {
   if $ci && [ -n "${GH_TOKEN:-}" ]; then

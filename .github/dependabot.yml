@@ -1,4 +1,4 @@
-# Keeps pinned dependencies current (PLAN.md D24). Every action here is pinned to a commit SHA and every image to a digest;
+# Keeps pinned dependencies current. Every action here is pinned to a commit SHA and every image to a digest;
 # without an update tool those pins only age. Dependabot updates the SHA and its version comment together.
 #
 # The 7-day cooldown is a supply-chain control: a release is adopted only after it has been public for a week, which is
@@ -20,27 +20,3 @@ updates:
         patterns: ["*"]
     commit-message:
       prefix: ci
-
-  # Floci, pinned by digest in the local AWS's compose file.
-  - package-ecosystem: docker-compose
-    directory: /infra/environments/dev
-    schedule:
-      interval: weekly
-    cooldown:
-      default-days: 7
-    commit-message:
-      prefix: infra
-
-  # OpenTofu providers (the lock files in each root).
-  - package-ecosystem: opentofu
-    directories:
-      - /infra/environments/dev/*
-    schedule:
-      interval: weekly
-    cooldown:
-      default-days: 7
-    groups:
-      providers:
-        patterns: ["*"]
-    commit-message:
-      prefix: infra

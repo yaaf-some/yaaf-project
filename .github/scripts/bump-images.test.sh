@@ -54,7 +54,7 @@ if echo "$rendered" | grep 'image:' | grep -q 'loadgenerator'; then fail "load g
 
 # The committed pins must be renderable and point only at our registry (or redis-cart's cache).
 committed="$(kubectl kustomize deploy/dev | grep -o 'image: [^ ]*' | sed 's/image: //' | sort -u)"
-if echo "$committed" | grep -v '^ghcr.io/ya11so22/yaaf-project/[a-z]*:content-[0-9a-f]\{12\}\(-arm64\)\?\(@sha256:[0-9a-f]\{64\}\)\?$' | grep -qv '^redis:alpine$'; then
+if echo "$committed" | grep -v '^ghcr.io/yaaf-some/yaaf-project/[a-z]*:content-[0-9a-f]\{12\}\(-arm64\)\?\(@sha256:[0-9a-f]\{64\}\)\?$' | grep -qv '^redis:alpine$'; then
   fail "committed pins: unexpected image"
 else
   ok "committed pins render to our registry images only"
