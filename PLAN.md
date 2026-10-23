@@ -5,23 +5,21 @@ open, and the decisions made. **Rewritten from scratch on 2026-10-08** after the
 lifted the zero-spend rule; the evidence behind it is [`docs/research/2026-10-08-rebuild-research.md`](docs/research/2026-10-08-rebuild-research.md).
 The plan it replaces, built around the Floci emulator, is at the tag `archive/floci-era` (made when this lands).
 
-**How it is used.** Each stage starts with questions in chat; the answers become decision rows (one line of *what*, one of
-*why*), the stage's checklist is ticked as pull requests land, and each merged PR adds one line to the log. Code comments
-cite decisions as `PLAN.md D<n>`. Numbers are never reused: rows carried over from the old plan keep theirs, new ones start
-at D47. **Status of this version: a proposal.** The rows marked *proposed* and the questions marked **?** are for the
-owner to settle before stage 1 starts.
+**How it is used.** Decisions are asked in chat as clickable questions, a few at a time, in plain words; each answer becomes one
+row below (what, and why). Code comments cite decisions as `PLAN.md D<n>`, and numbers are never reused. This plan has **five
+decisions of its own (D63 to D67)**; the working conventions carried over from the first plan sit folded under them.
+**Status: a proposal** until the owner accepts it (see "Open questions").
 
 ## Now
 
 *Update this block at the end of every session, on any machine; it is the first thing a new session reads.*
 
-- **Date:** 2026-10-22. **Branch and PR:** `claude/yaaf-cloud-migration-lsl4lq`, draft [#50](https://github.com/ya11so22/yaaf-project/pull/50)
+- **Date:** 2026-10-23. **Branch and PR:** `claude/yaaf-cloud-migration-lsl4lq`, draft [#50](https://github.com/ya11so22/yaaf-project/pull/50)
   (the plan, the offline account root, the research records). Not merged: waiting on the owner's yes or no on the plan.
-- **In AWS:** nothing. No resource has been created; the Free plan opened 2026-10-12 and ends 2027-04-12 (D58).
-- **Where the work runs (D59):** the owner's Mac for AWS and Kubernetes work once the "Mac ready" checklist is ticked (stage 2a);
-  Claude cloud sessions and the phone for code, review and planning. Until then CloudShell for applies.
-- **Next:** the owner answers the Mac's chip and macOS, and the Claude plan; an agent then makes the Mac bootstrap PR
-  (`scripts/bootstrap`, a lockfile covering the Mac, `kind` pinned). After that, the owner's first apply of `infra/account`.
+- **In AWS:** nothing. No resource has been created; the Free plan opened 2026-10-12 and ends 2027-04-12 (D65). About $100 of credit.
+- **The owner's setup:** a Mac mini (M2, 16 GB, macOS 27.2), Claude Pro, Docker Desktop for local Kubernetes (D66).
+- **Next:** one agent PR to make the Mac ready (`scripts/bootstrap`, `kind` pinned, the agent fenced from `~/.aws`); then the
+  owner's first apply of `infra/account` (stage 2a).
 
 ## What this is
 
@@ -54,15 +52,12 @@ run away), know what production needs (a costed, reviewed design), and can say e
 
 ## Constraints
 
-- **Money** (D54): about $10 a month in normal use and a **$20 hard ceiling**; **pennies a month when nothing is being
-  developed or presented**. No single AWS feature gives that (Budgets cannot delete a cluster, and the new spend limit has a $20
-  floor and limited release), so it comes from layers (below). Anything that needs a new paid plan is asked about first.
-  **Until stage 2 the account stays on the Free plan (D55)**: the $100 sign-up credit, plus up to $100 earned, is the cap, and
-  the account is suspended, not billed, when it runs out.
+- **Money** (D65): the Free plan's credit (about $100) is the cap until the upgrade, by 2027-04-01; after it, at most $20 a
+  month and nothing running when idle. Anything that needs a new paid plan is asked about first.
 - **No long-lived infrastructure.** Every environment is created for a purpose and destroyed after it. What persists costs
   pennies a month: the state bucket, backups, a few parameters, short-retention logs.
-- **Agents never hold cloud credentials.** They write code and open pull requests; only GitHub Actions workflows assume AWS
-  roles, through OIDC, and only the workflows the roles trust. Spending money always passes a human approval.
+- **Agents never change the AWS account** (D64). The owner applies, in their own terminal. An agent may look only through a
+  read-only AWS identity, if AWS offers one for this account; until then agents have documentation only (the Knowledge MCP).
 - **Honest evidence.** Every claim is *designed*, *verified in CI* (kind on a GitHub runner) or *verified on AWS (date)*,
   with a link to the run. A new check is trusted only after it has caught a planted fault.
 
@@ -115,7 +110,7 @@ own tests run k3s on GitHub runners); real AWS in short sessions costs cents. Fl
 
 | Layer | Choice | Why (and what production would add, *designed*) |
 |---|---|---|
-| **Accounts** | The owner's account is a *project* in an AWS-managed Organization (D52). At stage 2 the owner upgrades and activates advanced features and then administers that Organization: the project becomes a member account, a new management account holds only billing and the Organization, and our SCPs go on the member account | SCPs bind member accounts, not the management account, so the hard limits need that split. Until then AWS's own managed SCPs apply and cannot be changed ([research](docs/research/2026-10-13-aws-new-experience.md)). Production adds accounts per environment and a log archive (designed, as a landing zone) |
+| **Accounts** | The owner's account is a *project* in an AWS-managed Organization (D65). At stage 2 the owner upgrades and activates advanced features and then administers that Organization: the project becomes a member account, a new management account holds only billing and the Organization, and our SCPs go on the member account | SCPs bind member accounts, not the management account, so the hard limits need that split. Until then AWS's own managed SCPs apply and cannot be changed ([research](docs/research/2026-10-13-aws-new-experience.md)). Production adds accounts per environment and a log archive (designed, as a landing zone) |
 | **Network** | One VPC, two AZs, private subnets for nodes, public subnets for egress only; fck-nat instead of a managed NAT gateway | fck-nat costs about a tenth of a NAT gateway; production uses managed NAT per AZ (designed, with its cost) |
 | **Cluster** | EKS Auto Mode on a standard-support Kubernetes version (`support_type = STANDARD`; extended support costs six times as much); the built-in NodePools disabled and one of our own: arm64, t4g.medium to large with m7g/c7g as fallback, Spot first and on-demand when Spot is short; managed-resource visibility turned on, because since April 2026 Auto Mode hides its instances, volumes and ENIs from `describe` calls by default, and hidden resources still bill (AWS docs, to check in stage 2) | Auto Mode runs Karpenter, load balancing, EBS CSI and the Pod Identity agent for a fee of under a cent per node-hour, which removes most add-ons a solo engineer would otherwise maintain. Watch out: t4g bursts on CPU credits, billed when it exceeds its baseline |
 | **GitOps** | Self-managed Argo CD, installed once by OpenTofu; everything else is an Application in git (the gitops-bridge split: IaC hands cluster metadata to Argo CD, no Helm from OpenTofu); environments as directories (`ci`, `aws`) | Argo CD's own recommended layout; managed Argo CD (an EKS capability) is noted as an option with its price |
@@ -143,7 +138,7 @@ Route 53 hosted zone is needed and none is paid for.
 | `aws-*@yaafsome.fyi` | Mail for the AWS accounts (management, member) and their alternate contacts | Cloudflare Email Routing (free) forwards each address to the owner's iCloud mailbox, so every account gets its own address on the domain |
 | ACM certificate for `*.yaafsome.fyi` | Only for the one session that proves the AWS edge (ALB, ACM, WAF) | DNS validation record added in Cloudflare |
 
-### Cost guardrails, in layers
+### Cost guardrails, in layers *(a draft for stage 2; nothing here is binding yet)*
 
 No single control is enough, so several that fail independently. A layer is trusted only after a planted runaway shows it
 working. Two rules shape all of them: **an SCP only stops new resources** (a running cluster keeps billing until
@@ -178,13 +173,13 @@ rest before any session is ever started from GitHub.
 ### When OpenTofu runs
 
 OpenTofu (D5) is usable from the first day, in four steps. What gates each step is the identity it runs as and, for
-GitHub, the OIDC provider, which AWS's managed policy denies until advanced features are activated (D52, D55).
+GitHub, the OIDC provider, which AWS's managed policy denies until advanced features are activated (D65).
 
 | Phase | What OpenTofu can do | Who runs it, and how | Needs |
 |---|---|---|---|
 | **Now, stage 1** | `fmt`, `validate`, `tofu test` with mock providers, Trivy and Checkov, Infracost; no plan against AWS | GitHub Actions and cloud sessions; **no AWS credentials** | Nothing |
-| **Free plan, stage 2a** | A real `apply` of the bootstrap root (state and backup buckets), then a first EKS session on on-demand nodes | **The owner**, from AWS CloudShell (free, already signed in as the owner, no key stored anywhere); the result is committed as a log | The owner at the keyboard; the Region confirmed; credits as the cap |
-| **Free plan, supervised** | The same, driven by a cloud session | Claude, after the owner signs in with `aws login --remote`, for the session's life | A read-only identity if AWS offers one; otherwise the owner's own, which is why this is last |
+| **Free plan, stage 2a** | A real `apply` of the bootstrap root (state and backup buckets), then a first EKS session on on-demand nodes | **The owner**, in their own terminal: AWS CloudShell until the Mac is ready, then the Mac (D64, D66); the result is committed as a log | The owner at the keyboard; the Region confirmed; credits as the cap |
+| **Free plan, a look** | Read the account, never change it | Claude, through a read-only AWS identity the owner signs in with, **if** AWS offers one for this account (open question) | A read-only identity; without one, no agent access at all |
 | **After advanced features, stage 2** | Every apply from GitHub Actions: `plan` on pull requests, `apply` in the approved session workflow, the reapers | GitHub, through OIDC roles (`session`, `reaper`) | Paid plan, advanced features, the OIDC provider (D6) |
 
 **Watch out:** what AWS denies on the Free plan, Spot nodes and the OIDC provider, is exactly what the final design uses. The
@@ -195,7 +190,7 @@ the platform, not the automation.
 
 | Repository | Owner | Holds |
 |---|---|---|
-| `yaaf-platform` (this repository, renamed; D53) | The platform engineer (the owner) | OpenTofu, the GitOps configuration and pins, policies, workflows, scenarios, the architecture track, this plan |
+| `yaaf-platform` (this repository, renamed; D67) | The platform engineer (the owner) | OpenTofu, the GitOps configuration and pins, policies, workflows, scenarios, the architecture track, this plan |
 | `yaaf-catalog` | The Catalog team (agents) | Its services' source, tests, Dockerfiles, its build workflow |
 | `yaaf-checkout` | The Checkout team (agents) | The same for its services |
 
@@ -240,24 +235,23 @@ Each stage ends with evidence a reviewer can open. Costs are for the stage's own
 - [x] The AWS Knowledge MCP is wired through `.mcp.json` (docs, pricing facts and regional availability; no credentials)
 - [ ] Owner, in AWS Settings: confirm the project Region, the account creation date and the credits left; Cost Explorer on; a
       Budgets alert at half the credits
-- [ ] **The "Mac ready" checklist (D59),** from the 2026-10-22 research: the owner says the Mac's chip and macOS and the Claude
-      plan; an agent makes one PR with `scripts/bootstrap`, a `mise.lock` that covers the Mac (`macos-x64` is missing today),
-      `kind` pinned, and a decision on `mise.toml`'s project-local AWS paths; the owner installs Claude Code and a container runtime
-      (Docker Desktop is free for an individual), runs `scripts/bootstrap` and `mise run check`, and proves a kind node reports
-      `cgroup2fs`; the agent is fenced from `~/.aws` in the checked-in settings and a probe confirms it; Remote Control and the phone
-      app are set up. Applies then run in the owner's own terminal, with no agent session open while the sign-in is live
-- [ ] Owner: the full Agent Toolkit setup (`aws login`, `aws configure agent-toolkit`), later, when a read-only identity exists
+- [ ] **The Mac mini ready (D66).** One agent PR: `scripts/bootstrap` (the cloud hook and the owner both run it), `kind` pinned in
+      `mise.toml`, a decision on `mise.toml`'s Floci-era project-local AWS paths, and settings that deny agents `~/.aws`. The
+      lockfile already covers Apple silicon (`macos-arm64`). Then the owner: installs Docker Desktop and Claude Code, runs
+      `scripts/bootstrap` and `mise run check`, proves a kind node reports `cgroup2fs`, confirms with a probe that an agent
+      cannot read `~/.aws`, and sets up Remote Control and the phone app
+- [ ] Owner: the full Agent Toolkit setup (`aws login`, `aws configure agent-toolkit`), only with a read-only identity (D64)
 - [x] The account root, `infra/account/` (2026-10-13): the state bucket, the permissions boundary and the deployer role, with
       4 offline tests (mock provider, no credentials) in `scripts/check`, each shown to fail on a planted fault; Trivy passes
       with one accepted, dated finding (the KMS key, $1 a month, reviewed at 2a)
 - [x] The CloudShell runbook, `docs/guides/account-bootstrap-cloudshell.md`, marked *to verify* until it has run
-- [ ] **Owner, the first real apply:** confirm the Region and account ID in AWS Settings, then run the runbook in CloudShell.
+- [ ] **Owner, the first real apply:** confirm the Region and account ID in AWS Settings, then run the runbook (CloudShell, or the Mac once ready).
       The agent does not apply. The result (what AWS enforces, the date) is recorded in the guide
 - [ ] The backup bucket (D42), added to the root before the first session that stores data
 - [ ] The first apply's bootstrap state migrated into the bucket it created (`tofu init -migrate-state`), to verify on the real account
 - [ ] A first EKS session run by the owner (on-demand nodes, Pod Identity, Argo CD pulling from git), with its measured create
       and destroy times and its credit cost recorded, and the account empty afterwards
-- [ ] **The gate to stage 2:** upgrade and activate advanced features **by 2027-04-01** (D58: the six-month Free period ends
+- [ ] **The gate to stage 2:** upgrade and activate advanced features **by 2027-04-01** (D65: the six-month Free period ends
       2027-04-12, and a 90-day window follows before AWS deletes the account), or earlier if the credits run out, and only once
       stage 1 is finished and the guardrails are written
 
@@ -342,23 +336,33 @@ Each stage ends with evidence a reviewer can open. Costs are for the stage's own
 
 ## Open questions
 
-- **? The app.** *Recommended:* AWS's [retail-store-sample-app](https://github.com/aws-containers/retail-store-sample-app):
-  five services, each with its own store (MariaDB or MySQL, DynamoDB, Redis), a ready EKS variant on RDS and DynamoDB,
-  Prometheus metrics, OpenTelemetry tracing and a load generator, and
-  it is the app the EKS Workshop uses, so durable data needs no app changes. Online Boutique has more services and is better
-  known, but its managed-datastore options are Google Cloud only. Teams: Catalog (UI, catalog), Checkout (cart, checkout,
-  orders).
-- **? The overall plan.** The owner confirms the proposed decisions D47 to D51 as a whole, or changes them.
-- **? Credits and the upgrade.** Whether unused credits survive the upgrade (the page is silent). Decides whether to spend the
-  credits down before the upgrade. The six-month deadline is now known (D58), so this no longer blocks anything.
-- **? The Mac and the Claude plan.** The Mac's chip (Apple silicon or Intel) and macOS version, and the owner's Claude plan
-  (Remote Control and cloud sessions need Pro or above; Dispatch needs Pro or Max). Decides the lockfile platform and which
-  phone features exist.
-- **? A read-only identity.** Whether the new experience offers a read-only team-member role, for the supervised Agent Toolkit.
+- **? The plan as a whole.** The owner accepts D63 to D67 and the stages, or changes them. Asked in chat.
+- **? A read-only identity.** Whether the new AWS experience offers a read-only team-member role an agent could sign in with
+  (D64). Until it does, agents have documentation only.
+- **? Credits and the upgrade.** Whether unused credits survive the upgrade (the AWS page is silent). Decides whether to spend
+  the credits down before 2027-04-01.
 
 ## Decisions
 
+Five decisions drive this plan. Each was asked in chat and is one row.
+
 | | Decision | Why |
+|---|---|---|
+| <a id="d63"></a>D63 | **Two places, one configuration.** Everyday work and tests run on a small Kubernetes (kind) on the owner's Mac mini and on GitHub's free runners. Real AWS is used only in short EKS sessions that destroy themselves (about $1 each on the Free plan's on-demand nodes). Floci is dropped. *Decided 2026-10-23* | Real AWS behaviour where it matters, for cents; the delivery system tested on every change for free. A forgotten cluster costs about $5 a day, so AWS is never the default place ([research](docs/research/2026-10-08-rebuild-research.md)) |
+| <a id="d64"></a>D64 | **Only the owner changes AWS.** The owner runs plan and apply in their own terminal (the Mac; CloudShell until it is ready) and no agent session runs while that sign-in is live. Agents may look, never change, and only through a read-only AWS identity if AWS offers one for this account; until then they have documentation only, through the AWS Knowledge MCP (`.mcp.json`, no credentials). The checked-in settings deny agents `~/.aws`. *Decided 2026-10-23* | An agent holding cloud credentials is the main risk, and Claude's sandbox can read `~/.aws` unless told not to ([research](docs/research/2026-10-22-work-environment-local-vs-cloud.md)) |
+| <a id="d65"></a>D65 | **Money and the account.** Stay on the Free plan: its credit (about $100) is the cap, and AWS suspends rather than bills. Upgrade once, and activate advanced features, by **2027-04-01** (the six-month period ends 2027-04-12), or earlier if a stage needs what the Free plan denies (GitHub OIDC, Spot, an Organization of our own, Fault Injection Service). After the upgrade: at most $20 a month, with the cost-protection layers designed then. Region `us-east-1`. *Decided 2026-10-23* | The credit is a stronger cap than anything we could build, and both AWS steps are irreversible, so they wait for a reason ([research](docs/research/2026-10-13-aws-new-experience.md)) |
+| <a id="d66"></a>D66 | **Where the work runs.** The Mac mini (Docker Desktop with kind) is the main workbench for AWS and Kubernetes work. Claude cloud sessions and the phone handle code, review and planning, and are the fallback when the Mac is off. The repository is the only memory: the Now block above, a one-command bootstrap, a lockfile that covers the Mac. *Decided 2026-10-23* | The cloud container cannot run Kubernetes 1.35+ (cgroup v1) and its AWS sign-in dies with the VM; a Mac has both a usable kernel and a safe place for the owner's sign-in. It cannot be the only place, since Remote Control needs the Mac awake |
+| <a id="d67"></a>D67 | **The shop and the teams.** AWS's retail sample, with fault flags in the style of the OpenTelemetry demo added later. Three repositories (`yaaf-platform`, `yaaf-catalog`, `yaaf-checkout`); the two agent teams run as GitHub Apps with no admin bypass (stage 7). *Decided 2026-10-23* | Real data stores on AWS with no app changes; a team boundary an agent cannot cross, because Claude's own sessions push as the owner and an identity that can bypass a rule is not stopped by it |
+
+**Merged on 2026-10-23.** The earlier proposals D47 to D62 were folded into these five: D47 into D63; D49, D56, D57 and D60 into
+D64; D48, D52, D54, D55 and D58 into D65; D59, D61 and D62 into D66; D51 and D53 into D67. D50 (EKS Auto Mode on Graviton,
+Pod Identity, Parameter Store) is now a design note in the architecture section, decided at stage 3. The dated research records
+and the log keep the numbers of their day.
+
+<details>
+<summary>Standing conventions carried over from the first plan (17, unchanged): OpenTofu, GitOps, the pipeline standard and others</summary>
+
+| | Convention | Why |
 |---|---|---|
 | <a id="d5"></a>D5 | OpenTofu, not Terraform | The community-governed fork; same language and providers |
 | <a id="d6"></a>D6 | GitHub Actions reaches AWS only through OIDC, each role trusted on an exact `sub` and `aud`. *Amended 2026-10-08 (proposed):* two roles, `session` (the approved session environment on `main`) and `reaper` (the scheduled run on `main`); pull requests get none | No stored keys; a role can be assumed only from the workflow and branch it was made for |
@@ -377,27 +381,10 @@ Each stage ends with evidence a reviewer can open. Costs are for the stage's own
 | <a id="d38"></a>D38 | The domain `yaafsome.fyi` on Cloudflare: the apex for the showcase, one level of subdomains for the demo; tunnel and Access set up by a written runbook | One permanent name for everything presented |
 | <a id="d41"></a>D41 | Agents run the delivery loop in `CLAUDE.md`: check, draft PR, a cold review, auto-merge gated on required checks; they stop for open questions, money, real AWS, secrets, settings or data deletion | "Never merge red" is a property of the platform, not of the agent's care |
 | <a id="d45"></a>D45 | Live demos are attended and time-boxed, plus a recorded walkthrough | Nothing runs, or bills, when nobody is looking |
-| <a id="d47"></a>D47 | *Proposed:* two environments from one GitOps configuration: kind on a free arm64 runner for every change, ephemeral EKS sessions on real AWS when something needs proving or presenting. Floci is dropped | Real AWS behaviour where it matters, for cents; the delivery system tested on every change for free ([research](docs/research/2026-10-08-rebuild-research.md)) |
-| <a id="d48"></a>D48 | *Proposed:* a monthly ceiling of $20, no compute when idle, enforced by seven layers (SCPs that deny creation only, approval to spend, self-destroying sessions, a reaper workflow, a reaper Lambda, Budgets that empty the account, the spend limit if offered), each proved by a planted runaway | No single AWS feature caps spend at a few dollars, and an SCP alone never stops what is already running; layers that delete, and that do not block each other, do |
-| <a id="d49"></a>D49 | *Proposed:* agents never hold AWS credentials; only workflows assume roles, and a session needs the owner's approval | Agents with cloud credentials are the lethal-trifecta risk; the pipeline is the only door |
-| <a id="d50"></a>D50 | *Proposed:* EKS Auto Mode on Graviton Spot, private subnets with fck-nat, Pod Identity, External Secrets with Parameter Store | The least to maintain alone, the cheapest per session, AWS's current recommendations; the production differences are designed and costed |
-| <a id="d51"></a>D51 | *Proposed:* autonomous agents (both teams and the platform's own) are GitHub Apps installed only where they work, run through `claude-code-action`, without `deployments` or `actions: write`; rulesets have no bypass, not even for admins | Routines push as the owner, and an identity that can bypass a rule, or approve a deployment, is not stopped by it |
 
-| <a id="d52"></a>D52 | The hard limits need an Organization with a member account; the owner's account is a project inside an AWS-managed one. *Amended 2026-10-13* (decided 2026-10-10 on a wrong assumption): the owner reaches control by upgrading and activating advanced features at stage 2, which hands over that Organization; a new management account then holds only billing and the Organization. Replaces the old rule against a second account | SCPs bind member accounts only; the new experience does not let us create an Organization of our own, and activation is irreversible, so it waits until it is needed ([research](docs/research/2026-10-13-aws-new-experience.md)) |
-| <a id="d53"></a>D53 | Three repositories: this one, renamed `yaaf-platform`, keeps its history; `yaaf-catalog` and `yaaf-checkout` for the teams. *Decided 2026-10-10* | A GitHub App can be fenced to a repository but not to a folder in a public one; the history, Scorecard and links stay |
-| <a id="d54"></a>D54 | us-east-1; about $10 a month in normal use and a $20 hard ceiling. *Decided 2026-10-10; Region confirmed by the owner 2026-10-13* | The cheapest Region and first for new features; the ceiling leaves room for a mistake before the guardrails empty the account. AWS's docs assign a US contact address `us-east-2`, so the owner confirms the project's Region in AWS Settings before the first apply |
-
-| <a id="d55"></a>D55 | Stay on the Free plan, using its credits as the cap, until a stage needs what it denies (GitHub OIDC, Spot, an Organization of our own, Fault Injection Service); then upgrade and activate advanced features, once. *Decided 2026-10-13* | The credits are a stronger cap than any guardrail we could build, and both steps are irreversible, so they wait for a reason |
-| <a id="d56"></a>D56 | Until then OpenTofu applies run **owner-at-keyboard in AWS CloudShell**; a cloud session gets AWS credentials only by the owner's own `aws login`, never stored, for that session's life. *Decided 2026-10-13* | CloudShell is free and already signed in as the owner, so no key exists anywhere; the full Agent Toolkit setup follows when a read-only identity does |
-| <a id="d57"></a>D57 | The AWS Knowledge MCP is wired through the committed `.mcp.json` | Documentation, pricing facts and regional availability for agents with no credentials; it cannot touch an account. *Decided 2026-10-13* |
-| <a id="d58"></a>D58 | The Free-plan clock is fixed: the account opened on 2026-10-12, so the six-month period ends 2027-04-12 and the 90-day upgrade window follows. The upgrade happens by 2027-04-01 at the latest, or earlier if the credits run out. *Decided 2026-10-13 from the owner's answer* | AWS's Free terms end the account at six months or when credits are exhausted, and delete it 90 days later if not upgraded; a date is easier to keep than a trigger |
-| <a id="d59"></a>D59 | The work is hybrid, and the owner's Mac is the **primary workbench for anything that touches AWS or needs Kubernetes**, once the "Mac ready" checklist in stage 2a is ticked; Claude cloud sessions and the phone stay the default for code, review and planning, and the fallback when the Mac is off. The repository is the only memory (a **Now** block in this file). Until the Mac is ready, applies run from CloudShell (D56). *Decided 2026-10-13; amended 2026-10-22 on the owner's instruction to return to the Mac* | The cloud container is cgroup v1 (measured 2026-10-22), so Kubernetes 1.35+ cannot run in it, and its AWS sign-in dies with the VM; a Mac has both a usable kernel and a place the owner's sign-in can live. It cannot be the only place, since Remote Control works only while the Mac is awake ([research](docs/research/2026-10-22-work-environment-local-vs-cloud.md)) |
-| <a id="d60"></a>D60 | *Proposed:* a Mac session sign-in is never open while an unfenced agent session runs: AWS applies run in the owner's own terminal, and the checked-in settings deny the agent `~/.aws` | Claude's sandbox allows reads of `~/.aws` unless told otherwise, and an agent runs as the owner's Mac user ([research](docs/research/2026-10-22-work-environment-local-vs-cloud.md)); D49 must hold on the Mac by settings, not only in the cloud by distance |
-| <a id="d61"></a>D61 | *Proposed:* the project is resumable from any place: this file's **Now** block, a `scripts/bootstrap` that the cloud hook and the owner both run, and nothing that matters kept on one machine (auto memory does not travel) | Cloud VMs are reclaimed and a Mac can be off, so the repository must carry every fact a new session needs |
-| <a id="d62"></a>D62 | *Proposed:* `mise.lock` covers every platform that runs the tools, and `kind` is pinned in `mise.toml` so the Mac and CI cannot drift | `mise install --locked` fails on a platform with no lock entry; kind is already what the CI environment uses |
+</details>
 
 **Retired with the Floci era** (readable at the archive tag): D20, D21 (the engagement is restated above), D22, D30 to D32,
-D34, D39, D40, D42 to D44, D46.
 
 ## Log
 
@@ -407,3 +394,4 @@ One line per merged change. Earlier history is at the tags `archive/windows-era`
 - 2026-10-13: the account is a project in the new AWS experience on the Free plan: D52 amended, D55 to D59, stage 2a; the AWS Knowledge MCP wired (`.mcp.json`)
 - 2026-10-13: the account root (`infra/account/`): the state bucket, the permissions boundary and the deployer role, offline-tested; not applied
 - 2026-10-22: the work environment researched (Mac versus Claude cloud versus hybrid); D59 amended, D60 to D62 proposed, a Now block added
+- 2026-10-23: the decisions cut from 33 rows to 5 (D63 to D67) with the 17 working conventions folded away; settled with the owner as clickable questions; the Mac mini is Apple silicon, so no extra lockfile entry is needed

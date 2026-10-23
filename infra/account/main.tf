@@ -1,4 +1,4 @@
-# The first root for the real AWS account (PLAN.md D55 to D57): a state bucket, and a deployer role that is itself capped by a
+# The first root for the real AWS account (PLAN.md D64, D65): a state bucket, and a deployer role that is itself capped by a
 # permissions boundary. Nothing here is applied yet. Every resource is offline-testable with `tofu test` (tests/).
 #
 # Watch out: aws_s3_bucket.state has prevent_destroy, so a typo cannot delete the state; removing it on purpose is a
@@ -115,7 +115,7 @@ resource "aws_s3_bucket_versioning" "state" {
 
 # State holds secrets (the RDS password, later), so it is encrypted at rest. SSE-S3 costs nothing; a customer-managed KMS
 # key costs $1 a month and is a decision for later, not a default.
-# Accepted until 2027-04-12 (review at stage 2a, PLAN.md D55): a customer-managed KMS key costs $1 a month and adds a key to
+# Accepted until 2027-04-12 (review at stage 2a, PLAN.md D65): a customer-managed KMS key costs $1 a month and adds a key to
 # manage. SSE-S3 is encrypted at rest with AWS-managed keys; move to KMS once the account is upgraded and its costs are known.
 #trivy:ignore:AWS-0132
 resource "aws_s3_bucket_server_side_encryption_configuration" "state" {
@@ -130,7 +130,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "state" {
 
 resource "aws_iam_policy" "boundary" {
   name        = local.boundary_name
-  description = "Ceiling for the OpenTofu deployer (PLAN.md D47, D56): no escape from the account, no unbounded principals"
+  description = "Ceiling for the OpenTofu deployer (PLAN.md D63, D64): no escape from the account, no unbounded principals"
   policy      = local.boundary_policy
 }
 

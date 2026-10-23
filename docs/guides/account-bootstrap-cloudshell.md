@@ -1,6 +1,6 @@
 # Guide: the first apply of the account root, from CloudShell
 
-**Related:** [PLAN.md](../../PLAN.md) D55 to D57 (the Free-plan route, CloudShell applies, the Knowledge MCP), stage 2a;
+**Related:** [PLAN.md](../../PLAN.md) D64 and D65 (only the owner changes AWS, the Free-plan route), stage 2a;
 `infra/account/` (the root); `infra/account/tests/` (the offline tests).
 **Evidence:** designed, and tested offline (`tofu test`, 4 runs, with planted faults caught on 2026-10-13). **Not yet
 applied to AWS.** Each step below is marked *to verify* until it has run for real, and the result is recorded here with a date.
@@ -18,7 +18,7 @@ Nothing else. No VPC, no cluster, no NAT gateway, no key with a monthly fee.
 
 ## Before you start (you do these; the agent does not)
 
-1. **Confirm the Region** in AWS Settings, Project, Additional Info. Expect `us-east-1` (D54). If it says `us-east-2`, stop:
+1. **Confirm the Region** in AWS Settings, Project, Additional Info. Expect `us-east-1` (D65). If it says `us-east-2`, stop:
    the root's default changes, and the plan is updated first.
 2. **Note the account ID**, from the same page. It is not secret, but never guess it.
 3. **Find the identity you sign in with**, and its ARN (for example from the IAM console, or

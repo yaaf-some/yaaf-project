@@ -14,6 +14,6 @@ output "boundary_policy" {
 }
 
 output "deployer_role_arn" {
-  description = "The role the owner's CloudShell applies assume (PLAN.md D56)."
+  description = "The role the owner's CloudShell applies assume (PLAN.md D64)."
   value       = aws_iam_role.deployer.arn
 }

@@ -1,5 +1,5 @@
 variable "region" {
-  description = "The project's Region (PLAN.md D54). The owner's project is us-east-1; AWS's docs say a US contact address is assigned us-east-2, so confirm in AWS Settings before the first apply."
+  description = "The project's Region (PLAN.md D65). The owner's project is us-east-1; AWS's docs say a US contact address is assigned us-east-2, so confirm in AWS Settings before the first apply."
   type        = string
   default     = "us-east-1"
 }
@@ -21,7 +21,7 @@ variable "account_id" {
 }
 
 variable "deployer_trusted_principal_arn" {
-  description = "The IAM user or role allowed to assume the deployer role: the owner's own identity for the interim CloudShell applies (PLAN.md D56). GitHub's OIDC role is added later, at stage 2, once the Free-plan blocks are checked."
+  description = "The IAM user or role allowed to assume the deployer role: the owner's own identity for the interim CloudShell applies (PLAN.md D64). GitHub's OIDC role is added later, at stage 2, once the Free-plan blocks are checked."
   type        = string
 
   validation {
