@@ -31,6 +31,8 @@ COPY requirements.txt .
 RUN pip install --prefix="/install" -r requirements.txt
 
 FROM base
+# Modified by yaaf-project, 2026-10-23: pip 26.2.2 vendors certifi 2026.10.19 (GHSA-6q48-6c7w-9gw2); the base image's pip 26.2.1 vendors 2026.6.17.
+RUN pip install --no-cache-dir --upgrade 'pip>=26.2.2'
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
