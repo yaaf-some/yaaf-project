@@ -1,6 +1,6 @@
 #!/bin/bash
 # The cloud workbench (PLAN.md D30): every Claude Code cloud session starts with the locked tools, so `mise run check`
-# works at once. Docker is started by `mise run up`, the only thing that needs it. Cloud sessions only; on any other
+# works at once. Cloud sessions only; on any other
 # machine this does nothing.
 # Synchronous on purpose: the session waits a few seconds rather than racing a command against a half-installed tool.
 set -euo pipefail

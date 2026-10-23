@@ -46,7 +46,7 @@ proves AWS behaviour). The full table, components and cost guardrails are in the
 ### Stage 0: decide and reset *($0)*
 
 - [ ] The owner accepts this plan (open question below)
-- [ ] Tag `archive/floci-era`; remove Floci roots and tasks; rewrite `CLAUDE.md` (its "zero AWS spend" bullet and the borrowed-sandbox section are stale) and the README
+- [x] Tag `archive/floci-era`; remove Floci roots and tasks; rewrite `CLAUDE.md` (its "zero AWS spend" bullet and the borrowed-sandbox section are stale) and the README
 - [ ] Rulesets on `main` with no bypass; required checks named
 
 ### Stage 1: the app and the CI environment *($0)*
@@ -123,3 +123,4 @@ One line per merged change. Earlier history is at the tags `archive/windows-era`
 - 2026-10-13: the account root (`infra/account/`): the state bucket, the permissions boundary and the deployer role, offline-tested; not applied
 - 2026-10-22: the work environment researched (Mac versus Claude cloud versus hybrid); D59 amended, D60 to D62 proposed, a Now block added
 - 2026-10-23: the decisions cut from 33 rows to 5 (D63 to D67) with the 17 working conventions folded away; settled with the owner as clickable questions; the Mac mini is Apple silicon, so no extra lockfile entry is needed
+- 2026-10-23: stage 0, the Floci era retired: tagged `archive/floci-era`; the dev roots, compose file, `up`/`down`/`sandbox` tasks, drills, `environment.yml`, the `alb-ingress` module and four guides removed; `infra` now validates the account root and the modules; `CLAUDE.md`, the README and `CONTEXT.md` rewritten for D63 to D65

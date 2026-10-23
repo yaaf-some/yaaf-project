@@ -21,8 +21,8 @@ Every claim in this track carries one of three labels. Nothing here is presented
 | Label | Meaning |
 |---|---|
 | **designed** | Reasoned and written down, not built. |
-| **verified on Floci** | Built and run on the local emulator. Floci proves that tested SDK and IaC scenarios work, not that real AWS behaves the same way; its known gaps are listed in `infra/README.md`. |
-| **verified on real AWS** | Run on real AWS. None yet; only free identity services may be used ([D20](../../PLAN.md#d20), proposed). |
+| **verified in CI** | Built and run on a GitHub runner or the Mac (kind), with no AWS. Proves the delivery system, not AWS behaviour. Earlier claims labelled *verified on Floci* came from the retired emulator ([D63](../../PLAN.md#d63)). |
+| **verified on AWS (date)** | Run on the project's own AWS account, in a short session the owner starts ([D64](../../PLAN.md#d64), [D65](../../PLAN.md#d65)). None yet. |
 
 ## Contents and state
 

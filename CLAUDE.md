@@ -4,11 +4,11 @@ The single source of working rules for this repository, for people and agents. S
 
 ## The owner's standing preferences
 
-- **Zero AWS spend, zero accident risk.** Nothing is ever created on the owner's AWS account (D20, D32); real AWS means
-  only a borrowed vendor sandbox that bills nobody (D43, D46, the AWS rules at the end). Billable designs are written down
-  with a Pricing Calculator estimate. The owner's AWS account is old (no new Free Tier credits); never suggest opening a
-  second account. Free tiers elsewhere (GitHub Actions for a public repository, Vercel Hobby, Cloudflare quick tunnels)
-  are fine; anything that needs a card on file is asked about first.
+- **Capped AWS spend, zero accident risk.** The project's own AWS account is on the Free plan: its credit (about $100) is
+  the cap, and AWS suspends rather than bills (PLAN.md D65). Only the owner creates or changes anything there (D64).
+  Billable designs are written down with a Pricing Calculator estimate. Never suggest opening a second account. Free
+  tiers elsewhere (GitHub Actions for a public repository, Vercel Hobby, Cloudflare quick tunnels) are fine; anything
+  that needs a card on file is asked about first.
 - **Plan in chat, as clickable questions.** Before a stage or any non-trivial change, ask the owner with the question tool
   (a few at a time, plain words, a recommended option first, no decision numbers in the text); record each answer as one row
   in `PLAN.md`. Keep the decisions few: fold a new one into an existing row when it belongs there. No ADRs.
@@ -16,7 +16,7 @@ The single source of working rules for this repository, for people and agents. S
   place.
 - **The project is also a course.** Explain the *why* in plain words while working, flag traps with a short
   "Watch out:" line, and write or extend a guide in `docs/guides/` when a concept is new to the project.
-- **Honesty about evidence.** Every claim is *designed*, *verified on Floci* or *verified on real AWS*. Retract claims
+- **Honesty about evidence.** Every claim is *designed*, *verified in CI* or *verified on AWS (date)*. Retract claims
   that turn out wrong. Prove a new check against a planted fault before trusting it.
 - No job-search timeline steering; the project's own quality sets the order of work.
 
@@ -81,25 +81,14 @@ Everything is documented well enough to explain later, as part of finishing the 
 - **Research** that informs a stage goes in `docs/research/`, dated; it is a record and is not rewritten later.
 
 <!-- BEGIN AWS Agent Toolkit rules -->
-## Real AWS (borrowed sandboxes only)
+## Real AWS (the owner's account, PLAN.md D64, D65)
 
-**Superseded in part (2026-10-13), until stage 0 rewrites this file:** the plan now uses the owner's own AWS account on the
-Free plan (PLAN.md D64, D65). Where the lines below say "never the owner's account" or "borrowed sandboxes only", the
-plan wins; what still holds is that agents hold no AWS credentials except through the owner's own `aws login`, with the owner
-present, and that nothing is created without the owner starting it.
-
-These apply only when working in a borrowed real-AWS sandbox through the `yaaf-sandbox` profile (`mise run sandbox`,
-PLAN.md D43 and D46). This project's own rules above take precedence over them, in particular:
-
-- **The AWS Knowledge MCP is allowed** (`.mcp.json`, PLAN.md D64): documentation only, no credentials. Anything that signs in to
-  AWS is the owner's call and happens only with the owner at the keyboard (PLAN.md D64).
-- **The account guard is the owner's.** Never pass `--account` to `mise run sandbox` from the task's own output: ask
-  the owner, who reads the ID on the sandbox's own page. If the owner's account is signed in, stop and say so.
-
-- Real AWS means a vendor sandbox that is wiped afterwards and bills nobody. Never the owner's account, and never a
-  second account.
+- **Only the owner changes AWS.** The owner runs plan and apply in their own terminal; no agent session runs while that
+  sign-in is live. Agents hold no AWS credentials and never run `aws login`; if a signed-in AWS session is visible, stop
+  and say so.
+- **The AWS Knowledge MCP is allowed** (`.mcp.json`): documentation only, no credentials.
 - The infrastructure as code is OpenTofu (D5), not AWS CDK or CloudFormation.
-- Evidence from a sandbox is labelled *verified on real AWS (sandbox, date)*, with logs and proof of teardown.
+- Evidence from AWS is labelled *verified on AWS (date)*, with logs and proof of teardown.
 
 ### AWS Guidance (adapted from aws/agent-toolkit-for-aws, `rules/aws-agent-rules.md`, 2026-10-08)
 

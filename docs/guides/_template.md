@@ -1,7 +1,7 @@
 # Guide: {topic}
 
 **Related:** {plan decisions (`PLAN.md` D<n>), code paths}
-**Evidence:** {designed | verified on Floci | verified on real AWS}
+**Evidence:** {designed | verified in CI | verified on AWS (date)}
 
 ## The idea
 

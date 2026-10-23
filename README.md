@@ -11,38 +11,33 @@ The project simulates the two pressures a real platform lives under:
 2. **Shop users** bringing traffic spikes, abuse and failures, and the disasters the shop must recover from. SRE
    operates it; the solutions architect decides what it must withstand and at what cost.
 
-Everything runs on a **local AWS** ([Floci](https://github.com/floci-io/floci), a free emulator). Nothing is ever created
-on real AWS; where Floci differs from AWS, the difference is written down.
+Everyday work and tests run on a small Kubernetes (kind) on the owner's Mac and on GitHub's free runners; real AWS is
+used only in short sessions that destroy themselves, paid from the account's Free-plan credit (PLAN.md D63, D65).
 
 **Start with [`PLAN.md`](PLAN.md)**: the architecture, the stages of work, the open questions and every decision.
 
 ## How it runs
 
-There is no long-lived machine. Work happens in Claude Code cloud sessions, and the whole environment is **built from
-git and thrown away**: Floci, three OpenTofu roots, EKS on k3s, Argo CD and the shop. Production is *designed* for real
-AWS, never built; rebuilding the environment after every merge is the evidence that the design holds (PLAN.md D30 to
-D32). The ephemeral-runner workflow, the live demo and the showcase site are stages 2, 4 and 7 of the plan.
-
-In a session, `mise run up` builds it and `mise run down` removes it ([`infra/README.md`](infra/README.md)); a
-SessionStart hook installs the locked tools; `up` starts Docker. From a terminal: `aws --profile floci s3 ls`. A
-session builds the AWS layer only (it has cgroup v1, PLAN.md D44), so `kubectl get pods -A` works where the cluster
-runs: the arm64 runner, or a host with cgroup v2.
+Nothing is long-lived. The delivery system (images, pins, Argo CD, the routes) is proved on kind at no cost; AWS
+behaviour is proved in short EKS sessions that only the owner starts, from their own terminal (PLAN.md D64). Agents
+write the code and never hold AWS credentials. `mise run check` runs the fast checks. The Floci-era local AWS
+(`mise run up`) is readable at the tag `archive/floci-era`.
 
 ## What is here
 
-- **Infrastructure as code** (OpenTofu) in three layered roots: a state bucket, the account-level infrastructure (VPC,
-  EKS, ECR, IAM, an ALB) with state in S3 and native locking, and what runs in the cluster.
+- **Infrastructure as code** (OpenTofu): the account root (a state bucket, a permissions boundary, a deployer role),
+  tested offline with mock providers, and the modules the session root will use.
 - **CI on GitHub Actions** to a written standard: pull requests build and scan but never push; `main` publishes arm64
   images by digest with SLSA provenance and an SBOM; a Trivy gate that fails on new criticals; zizmor, kubeconform,
   Scorecard and Dependabot ([guide](docs/guides/ci-cd-pipeline-standard.md)).
 - **GitOps delivery**: Argo CD deploys from git as an app-of-apps through Gateway API routes; a bot pull request pins
   images by digest; rollback is reverting the source change, learned in a
   [deliberate failure exercise](docs/postmortems/2026-09-21-phase1-bad-emailservice.md).
-- **Least-privilege identity**: GitHub Actions federates into AWS with OIDC and three narrowly trusted roles, no stored
-  keys ([guide](docs/guides/iam-policies-and-trust.md)).
+- **Least-privilege identity**: a permissions boundary on everything the deployer role creates; GitHub Actions will
+  federate into AWS with OIDC and narrowly trusted roles, no stored keys (D6).
 - **The architecture track** (starting): requirements, views, a Well-Architected review with a findings register,
   reliability, cost, migration and security designs ([`docs/architecture/`](docs/architecture/README.md)). Each claim
-  is labelled *designed*, *verified on Floci* or *verified on real AWS*.
+  is labelled *designed*, *verified in CI* or *verified on AWS (date)*.
 - **Guides** ([`docs/guides/`](docs/guides/README.md)): what each piece is, why it was done this way, and what to watch
   out for.
 
@@ -58,18 +53,18 @@ Working rules: [`CLAUDE.md`](CLAUDE.md).
 | Path | What lives here |
 |---|---|
 | `PLAN.md` | The architecture, stages, open questions, decisions and log |
-| `infra/` | The local AWS (`environments/dev`: compose file and three OpenTofu roots), the modules, and the Floci quirks |
+| `infra/` | The account root and the OpenTofu modules |
 | `deploy/` | What Argo CD deploys: the Applications, the `dev` overlay with committed image pins, the routes |
-| `scripts/` | `check` (the pre-commit gate, also run by CI) and `drills/` (on-demand demonstrations) |
+| `scripts/` | `check`, the pre-commit gate, also run by CI |
 | `.github/` | Workflows and their scripts, with tests |
 | `app/` | Vendored Online Boutique (Google's code; see Attribution) |
 | `docs/architecture/` | The architecture track |
 | `docs/guides/` | Explanations for learning and interviews |
-| `docs/postmortems/`, `docs/research/` | Failure write-ups; dated research behind the decisions, and the drafted Floci fix |
+| `docs/postmortems/`, `docs/research/` | Failure write-ups; dated research behind the decisions |
 | `CONTEXT.md` | This project's glossary |
 
 Earlier history: the ADRs, handoff, milestones and journal were folded into the plan on 2026-10-08 and are readable at
-commit `c4c44b0`; the Windows era is at the tag `archive/windows-era`.
+commit `c4c44b0`; the Windows era and the Floci era are at the tags `archive/windows-era` and `archive/floci-era`.
 
 ## Attribution
 

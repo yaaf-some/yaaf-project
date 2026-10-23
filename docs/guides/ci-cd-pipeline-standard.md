@@ -17,12 +17,12 @@ target of supply-chain attacks.
 ```
 pull request ──► check   (seconds)  fmt · script tests · manifest schemas · zizmor · actionlint · gitleaks
             ├──► build   (minutes)  changed services: build · scan · gate on new CRITICAL      (nothing pushed)
-            └──► infra   (minutes)  fmt · validate · plan (PR comment) · IaC misconfig scan · Floci smoke test
+            └──► infra   (minutes)  fmt · validate (account root, modules) · IaC misconfig scan
 
 merge to main ─► build: build · scan · gate · push by digest · provenance + SBOM attestations
                    └─► pins: bot PR pins tag@digest in deploy/dev ─► merge ─► Argo CD deploys it
 
-weekly ─► rescan deployed images · scorecard · GHCR cleanup ·  Dependabot (actions, compose images, providers)
+weekly ─► rescan deployed images · scorecard · GHCR cleanup ·  Dependabot (actions, providers)
 ```
 
 `build`, `infra` and `check` are the three required checks; each ends in a **gate job** that always runs, so a pull request

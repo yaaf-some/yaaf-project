@@ -21,20 +21,10 @@ updates:
     commit-message:
       prefix: ci
 
-  # Floci, pinned by digest in the local AWS's compose file.
-  - package-ecosystem: docker-compose
-    directory: /infra/environments/dev
-    schedule:
-      interval: weekly
-    cooldown:
-      default-days: 7
-    commit-message:
-      prefix: infra
-
-  # OpenTofu providers (the lock files in each root).
+  # OpenTofu providers (the lock file in the account root).
   - package-ecosystem: opentofu
     directories:
-      - /infra/environments/dev/*
+      - /infra/account
     schedule:
       interval: weekly
     cooldown:

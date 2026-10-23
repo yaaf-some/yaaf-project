@@ -2,7 +2,7 @@
 
 **Related:** [D29](../../PLAN.md#d29) (the decision), [D26](../../PLAN.md#d26) (how it is deployed),
 [`deploy/apps/traefik.yaml`](../../deploy/apps/traefik.yaml) (the Gateway), [`deploy/routes/`](../../deploy/routes/argocd.yaml) and
-[`deploy/dev/route.yaml`](../../deploy/dev/route.yaml) (the routes), [the local environment guide](local-aws-environment.md)
+[`deploy/dev/route.yaml`](../../deploy/dev/route.yaml) (the routes), [the local environment guide](https://github.com/yaaf-some/yaaf-project/blob/archive/floci-era/docs/guides/local-aws-environment.md) (archived)
 **Evidence:** verified on Floci (every output below is from this cluster on 2026-10-05); the Gateway API facts are from its
 [specification](https://gateway-api.sigs.k8s.io/)
 

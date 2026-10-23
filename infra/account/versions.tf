@@ -9,6 +9,6 @@ terraform {
   }
 
   # No backend yet. This root creates the state bucket that the other roots will use, so its own state starts local
-  # (the same reasoning as infra/environments/dev/bootstrap, PLAN.md D22). Keeping that one file safe is a runbook step:
+  # (a bucket cannot hold the state of the root that creates it). Keeping that one file safe is a runbook step:
   # after the bucket exists it is migrated into the bucket (docs/guides/real-aws-account.md, once written).
 }

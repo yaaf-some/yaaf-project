@@ -25,10 +25,10 @@ Every guide uses the same five parts ([template](_template.md)):
 | Guide | Topic | Status |
 |---|---|---|
 | [Staying at $0 on AWS](aws-cost-safety.md) | Why AWS has no spending cap, what a zero-spend lane is, the account checks | written |
-| [The local AWS environment](local-aws-environment.md) | Floci, the three OpenTofu roots, state in S3 with locking, the CloudFront portal (removed), emulator traps | written; partly historical |
+| [The local AWS environment](https://github.com/yaaf-some/yaaf-project/blob/archive/floci-era/docs/guides/local-aws-environment.md) | Floci, the three OpenTofu roots, state in S3 with locking, the CloudFront portal (removed), emulator traps | archived (Floci era, tag `archive/floci-era`) |
 | [Kubernetes probes](kubernetes-probes.md) | Startup, liveness and readiness, through a service that restarted forever | written |
-| [Reaching an EC2 instance](reaching-an-ec2-instance.md) | SSH, SSM Run Command and the console terminal; key pairs, user data, security groups, instance profiles | historical (the workstation was removed) |
-| [IAM policies, boundaries and trust](iam-policies-and-trust.md) | Identity policy vs boundary vs trust policy; what Floci enforces, with a drill | written |
+| [Reaching an EC2 instance](https://github.com/yaaf-some/yaaf-project/blob/archive/floci-era/docs/guides/reaching-an-ec2-instance.md) | SSH, SSM Run Command and the console terminal; key pairs, user data, security groups, instance profiles | archived (Floci era, tag `archive/floci-era`) |
+| [IAM policies, boundaries and trust](https://github.com/yaaf-some/yaaf-project/blob/archive/floci-era/docs/guides/iam-policies-and-trust.md) | Identity policy vs boundary vs trust policy; what Floci enforces, with a drill | archived (Floci era, tag `archive/floci-era`) |
 | [The CI/CD pipeline standard](ci-cd-pipeline-standard.md) | What a good GitHub Actions pipeline does, the checklist for new ones, provenance, the scan ratchet | written |
 | GitHub OIDC to AWS | Federated identity, trust conditions, why no long-lived keys | to write (backfill, D6) |
 | GitOps with Argo CD | Pull versus push delivery, sync, why rollback means reverting the source | to write (backfill, D23) |
@@ -36,5 +36,5 @@ Every guide uses the same five parts ([template](_template.md)):
 | The Well-Architected review | Pillars, lenses, a findings register | to write with review v1 |
 | RAG and the assistant replatform | Embeddings, vector search, provider interfaces | to write with Phase 3 |
 | [Publishing with a tunnel and a login](cloudflare-tunnel-and-access.md) | How the demo is reached from the internet with no open port: Cloudflare Tunnel, Access, the one-time setup | written (unverified until `edge-check` passes) |
-| [Real AWS from a borrowed sandbox](real-aws-sandbox.md) | Borrowed vendor accounts, `aws login --remote`, the account guard, the AWS Agent Toolkit and MCP server, keeping emulator and real credentials apart | written (designed until the first sandbox run) |
+| [Real AWS from a borrowed sandbox](https://github.com/yaaf-some/yaaf-project/blob/archive/floci-era/docs/guides/real-aws-sandbox.md) | Borrowed vendor accounts, `aws login --remote`, the account guard, the AWS Agent Toolkit and MCP server, keeping emulator and real credentials apart | archived (Floci era, tag `archive/floci-era`) |
 | [Gateway API](gateway-api.md) | How traffic gets into the cluster: GatewayClass, Gateway, HTTPRoute, who owns what, and how to read a route's status | written |
