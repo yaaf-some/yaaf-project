@@ -66,6 +66,7 @@ needs kubectl "image pin tests" bash .github/scripts/bump-images.test.sh
 CRD_SCHEMAS='https://raw.githubusercontent.com/datreeio/CRDs-catalog/4c8dc296d32b06d15ccde9668ff136c951f4d539/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json'
 validate_manifests() {
   local dir rc=0
+  command -v kubectl >/dev/null 2>&1 || { echo "kubectl not installed" >&2; return 1; }
   for dir in deploy/*/; do
     kubectl kustomize "$dir" | kubeconform -strict -summary -kubernetes-version "$K8S_VERSION.0" \
       -schema-location default -schema-location "$CRD_SCHEMAS" - || rc=1

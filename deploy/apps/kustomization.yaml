@@ -1,5 +1,6 @@
-# Everything Argo CD runs besides itself, one Application per file. The root Application `platform`, created by
-# OpenTofu, points here; adding a platform component is adding a file and opening a pull request.
+# Everything Argo CD runs besides itself, one Application per file. A root Application `platform` is meant
+# to point here (its bootstrap went with the retired Floci setup, tag archive/plan-era); adding a platform component is
+# adding a file and opening a pull request.
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:

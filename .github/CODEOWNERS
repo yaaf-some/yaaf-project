@@ -3,3 +3,9 @@
 /.github/    @yaaf-some
 /deploy/     @yaaf-some
 /scripts/    @yaaf-some
+/.claude/    @yaaf-some
+/.githooks/  @yaaf-some
+/CLAUDE.md   @yaaf-some
+/mise.toml   @yaaf-some
+/mise.lock   @yaaf-some
+/.mcp.json   @yaaf-some
