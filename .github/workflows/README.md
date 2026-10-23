@@ -20,7 +20,7 @@ Also in `.github/`: `dependabot.yml` (weekly updates of action SHAs, the compose
 providers, each with a 7-day cooldown) and `CODEOWNERS`. The accepted-findings baseline for the scan gate is
 `.trivyignore.yaml` at the repository root.
 
-Verify a published image: `gh attestation verify oci://ghcr.io/ya11so22/yaaf-project/<service>@<digest> --repo ya11so22/yaaf-project`.
+Verify a published image: `gh attestation verify oci://ghcr.io/yaaf-some/yaaf-project/<service>@<digest> --repo yaaf-some/yaaf-project`.
 
 The pre-merge deploy check is `environment.yml` (above). To make it required: Settings, Branches, the rule for `main`, add the
 status check `environment`.

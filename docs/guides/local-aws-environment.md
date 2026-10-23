@@ -6,7 +6,7 @@
 > **Changed 2026-10-08 (D39, D40).** The environment no longer persists: Floci keeps everything in memory, `up` rebuilds
 > anything stale from git, and `reset` folded into `down`. The portal (S3 behind CloudFront), floci-dash and the EC2
 > workstation were removed; the parts of this guide about them are kept as a record of what was learned, and their code
-> is at [`c4c44b0`](https://github.com/ya11so22/yaaf-project/tree/c4c44b0/infra). Current operation: [`infra/README.md`](../../infra/README.md).
+> is at [`c4c44b0`](https://github.com/yaaf-some/yaaf-project/tree/c4c44b0/infra). Current operation: [`infra/README.md`](../../infra/README.md).
 
 ## The idea
 

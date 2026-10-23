@@ -18,7 +18,7 @@ documents feed the answer, and mixing them up is the most common IAM mistake:
 The rule underneath: an explicit **Deny** wins; otherwise you need an explicit **Allow**; otherwise it is denied.
 
 **Trust** is what makes CI safe. GitHub Actions proves who it is with a signed token whose `sub` claim names the
-repository and branch. A trust policy then says "only `repo:ya11so22/yaaf-project:ref:refs/heads/main` may assume this
+repository and branch. A trust policy then says "only `repo:yaaf-some/yaaf-project:ref:refs/heads/main` may assume this
 role". Two things must both hold: the token's **signature** is checked against the issuer's public keys, and its
 **claims** match the policy's conditions. A policy without a condition, or a wildcard `sub`, lets any repository in.
 
@@ -61,7 +61,7 @@ the `sub` this policy expects.
 - **Conditions are not evaluated for plain `AssumeRole`** on Floci (documented); they are for web-identity tokens from a
   Floci-hosted issuer. Do not read "trust policy passes locally" as "the same condition would pass on AWS".
 - **A permissions boundary is a ceiling, not a grant.** A user with only a boundary can do nothing. Both must allow.
-- **A wildcard `sub`** (`repo:ya11so22/*`) trusts every repository under that owner, and `StringLike` with a leading
+- **A wildcard `sub`** (`repo:yaaf-some/*`) trusts every repository under that owner, and `StringLike` with a leading
   `*` trusts everything. The plan is to fail such a policy in CI (Phase 2, policy as code).
 - **A forged token succeeding is the emulator, not the design.** The design's exact-match `StringEquals` on `sub`
   would refuse it on AWS. That is why this drill exists: to keep the difference visible instead of forgotten.

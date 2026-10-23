@@ -34,7 +34,7 @@ Nothing else. No VPC, no cluster, no NAT gateway, no key with a monthly fee.
    install path, since CloudShell has no OpenTofu preinstalled.
 3. Clone the repository and go to the root:
    ```bash
-   git clone https://github.com/ya11so22/yaaf-project && cd yaaf-project/infra/account
+   git clone https://github.com/yaaf-some/yaaf-project && cd yaaf-project/infra/account
    ```
    CloudShell's home directory has 1 GB and is deleted after 120 days without a session, so keep nothing there that is not
    also in git or in the state bucket.

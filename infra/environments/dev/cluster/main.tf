@@ -12,12 +12,12 @@ provider "helm" {
 module "argocd" {
   source = "../../../modules/argocd"
 
-  repo_url        = "https://github.com/ya11so22/yaaf-project.git"
+  repo_url        = "https://github.com/yaaf-some/yaaf-project.git"
   target_revision = var.target_revision
 
   # What the dev project may deploy from: this repository and the Helm chart repositories deploy/apps uses.
   source_repos = [
-    "https://github.com/ya11so22/yaaf-project.git",
+    "https://github.com/yaaf-some/yaaf-project.git",
     "https://traefik.github.io/charts",
   ]
 }

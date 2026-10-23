@@ -78,7 +78,7 @@ Copy this into the next pipeline (for example a deploy pipeline for real AWS, or
 <details><summary>What does SLSA Build L2 give you, and how do you check it here?</summary>
 
 Signed provenance from a hosted build platform: a tamper-evident record of which workflow, commit and runner produced an
-artifact. Here: `gh attestation verify oci://ghcr.io/ya11so22/yaaf-project/<service>@<digest> --repo ya11so22/yaaf-project`.
+artifact. Here: `gh attestation verify oci://ghcr.io/yaaf-some/yaaf-project/<service>@<digest> --repo yaaf-some/yaaf-project`.
 
 </details>
 

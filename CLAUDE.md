@@ -57,7 +57,7 @@ or permissions, or deleting data. Merging needs no approval otherwise; the owner
   of the plan splits them into two teams (Checkout, Catalog) in their own repository (D35).
 - **Platform engineer:** the owner, code owner of everything else (`.github/CODEOWNERS`). One GitHub identity does both,
   so required reviews cannot be enforced; ownership is a convention.
-- **Issues** live in GitHub Issues (`ya11so22/yaaf-project`), via `gh`. Labels: `needs-triage`, `needs-info`,
+- **Issues** live in GitHub Issues (`yaaf-some/yaaf-project`), via `gh`. Labels: `needs-triage`, `needs-info`,
   `ready-for-agent`, `ready-for-human`, `wontfix`. External PRs are not a request surface.
 
 ## Checks

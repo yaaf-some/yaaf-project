@@ -19,7 +19,7 @@ variable "project" {
 variable "github_repository" {
   description = "The GitHub repository (owner/name) allowed to assume the GitHub Actions roles."
   type        = string
-  default     = "ya11so22/yaaf-project"
+  default     = "yaaf-some/yaaf-project"
 }
 
 variable "kubernetes_version" {

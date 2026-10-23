@@ -75,12 +75,12 @@ echo
 echo "3. Enforcement on: a GitHub-style token, even with exactly the right claims"
 adm iam create-open-id-connect-provider --url https://token.actions.githubusercontent.com --client-id-list sts.amazonaws.com >/dev/null 2>&1
 cat > "$work/gh-trust.json" <<'EOF'
-{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Federated":"arn:aws:iam::000000000000:oidc-provider/token.actions.githubusercontent.com"},"Action":"sts:AssumeRoleWithWebIdentity","Condition":{"StringEquals":{"token.actions.githubusercontent.com:aud":"sts.amazonaws.com","token.actions.githubusercontent.com:sub":"repo:ya11so22/yaaf-project:ref:refs/heads/main"}}}]}
+{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"Federated":"arn:aws:iam::000000000000:oidc-provider/token.actions.githubusercontent.com"},"Action":"sts:AssumeRoleWithWebIdentity","Condition":{"StringEquals":{"token.actions.githubusercontent.com:aud":"sts.amazonaws.com","token.actions.githubusercontent.com:sub":"repo:yaaf-some/yaaf-project:ref:refs/heads/main"}}}]}
 EOF
 adm iam create-role --role-name drill-gh --assume-role-policy-document "$(fileuri "$work/gh-trust.json")" >/dev/null
 printf "   the right repository and branch:              "
 adm sts assume-role-with-web-identity --role-arn arn:aws:iam::000000000000:role/drill-gh --role-session-name drill-correct \
-  --web-identity-token "$(fake_jwt https://token.actions.githubusercontent.com 'repo:ya11so22/yaaf-project:ref:refs/heads/main')" \
+  --web-identity-token "$(fake_jwt https://token.actions.githubusercontent.com 'repo:yaaf-some/yaaf-project:ref:refs/heads/main')" \
   --no-sign-request --query 'AssumedRoleUser.Arn' --output text 2>&1 | result
 
 echo

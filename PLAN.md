@@ -12,7 +12,7 @@ Rewritten from scratch on 2026-10-08; the Floci-era plan is at the tag `archive/
 
 *Update at the end of every session, on any machine; it is the first thing a new session reads.*
 
-- **Date:** 2026-10-23. **Branch and PR:** `claude/yaaf-cloud-migration-lsl4lq`, draft [#50](https://github.com/ya11so22/yaaf-project/pull/50). Not merged: the owner is reviewing the plan.
+- **Date:** 2026-10-23. **Branch and PR:** `claude/yaaf-cloud-migration-lsl4lq`, draft [#50](https://github.com/yaaf-some/yaaf-project/pull/50). Not merged: the owner is reviewing the plan.
 - **In AWS:** nothing created. Free plan opened 2026-10-12, ends 2027-04-12; about $100 of credit (D65).
 - **Owner's setup:** Mac mini (M2, 16 GB, macOS 27.2), Claude Pro, Docker Desktop (D66).
 - **Next:** (1) the owner accepts or changes this plan; (2) one agent PR makes the Mac ready; (3) the owner's first apply of `infra/account`.
