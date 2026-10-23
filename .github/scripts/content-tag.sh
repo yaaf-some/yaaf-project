@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Prints the content-hash image tag for a build context (PLAN.md D23, PLAN.md D27).
+# Prints the content-hash image tag for a build context.
 #   usage: content-tag.sh <context-dir> [rev]
 # The tag is the git tree hash of the directory plus the architecture, so it changes only when the files the image is
 # built from change, or the architecture does. Unchanged services keep their tag across commits, which lets a deploy resolve
@@ -10,6 +10,5 @@ set -euo pipefail
 context="${1:?usage: content-tag.sh <context-dir> [rev]}"
 rev="${2:-HEAD}"
 
-arch="${IMAGE_ARCH:-arm64}"
 tree="$(git rev-parse "$rev:${context%/}")"
-echo "content-${tree:0:12}-${arch}"
+echo "content-${tree:0:12}-arm64"
