@@ -45,16 +45,16 @@ images:
     digest: sha256:fa446628eb8fa917a43ab5ec1e296df206e83c07fa4d71f2a25e874e8c979328
   - name: us-central1-docker.pkg.dev/online-boutique-ci/microservices-demo/emailservice
     newName: ghcr.io/yaaf-some/yaaf-project/emailservice
-    newTag: content-7e1d31f58204-arm64
-    digest: sha256:50b75d2a23064d63a4261b27ef774dd83107cd2d9d7c655cefdcb1b94ac54248
+    newTag: content-7e09c31b174e-arm64
+    digest: sha256:e69d5dadb5630b5b055727d44a7daea24545c7ce26b7470759cf68dddfea6c5a
   - name: us-central1-docker.pkg.dev/online-boutique-ci/microservices-demo/frontend
     newName: ghcr.io/yaaf-some/yaaf-project/frontend
     newTag: content-f5bead46a4e4-arm64
     digest: sha256:685d9230b08850a396ae9d694342a7a2af9b6de9f139177ba37257be9e985515
   - name: us-central1-docker.pkg.dev/online-boutique-ci/microservices-demo/loadgenerator
     newName: ghcr.io/yaaf-some/yaaf-project/loadgenerator
-    newTag: content-01428054871b-arm64
-    digest: sha256:40f2dc88d85be1c7e17bfa27f8fe56e180bff117676ff52761dcb02d6f626500
+    newTag: content-a3e6793eadd3-arm64
+    digest: sha256:3fd798edbdb0767dafb274b98db517e4153240582163a3891098fd5dfd8fffb3
   - name: us-central1-docker.pkg.dev/online-boutique-ci/microservices-demo/paymentservice
     newName: ghcr.io/yaaf-some/yaaf-project/paymentservice
     newTag: content-510987408aa9-arm64
@@ -65,14 +65,14 @@ images:
     digest: sha256:17b6ff452c7cb8604068872c3846b2f62c95ce440c2da0bc0d8446ebbff8aaff
   - name: us-central1-docker.pkg.dev/online-boutique-ci/microservices-demo/recommendationservice
     newName: ghcr.io/yaaf-some/yaaf-project/recommendationservice
-    newTag: content-7dfce87c6712-arm64
-    digest: sha256:56598158bdcdf986d68ec71c9a7357c219b323bf33facbf35e9c153093c6ac4d
+    newTag: content-125f040b34a6-arm64
+    digest: sha256:f9916848fcbde2226bb038a35487eb68aaba6ead3b6909c185494ec5d935bdb0
   - name: us-central1-docker.pkg.dev/online-boutique-ci/microservices-demo/shippingservice
     newName: ghcr.io/yaaf-some/yaaf-project/shippingservice
     newTag: content-0eaeaf515e46-arm64
     digest: sha256:408ddae8b8b18c650c1911ebbb86c46bc73bd1dc8282d48ef530e159edab103f
   - name: us-central1-docker.pkg.dev/online-boutique-ci/microservices-demo/shoppingassistantservice
     newName: ghcr.io/yaaf-some/yaaf-project/shoppingassistantservice
-    newTag: content-032bb90c833c-arm64
-    digest: sha256:137b3ce165a9ed32393c5d962cecb2c9a111b4f5a1cc2953f83e1ea7ca51ecfe
+    newTag: content-017eac6f9203-arm64
+    digest: sha256:71cfb16f1c1694ad2a6e8f28e5539e5967c037fd73a1c8d4e62bef77973b3dcb
 # END image pins
