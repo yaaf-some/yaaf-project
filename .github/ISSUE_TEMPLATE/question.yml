@@ -1,6 +1,6 @@
 name: Question
 description: A decision or fact that blocks work
-labels: ["needs-info"]
+labels: ["needs-triage"]
 body:
   - type: textarea
     id: question

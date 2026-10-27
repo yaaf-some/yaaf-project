@@ -42,7 +42,8 @@ A shop (Google's Online Boutique, vendored in `app/`) delivered to Kubernetes by
 2. Open a draft PR and subscribe to its activity.
 3. Review with a separate pass that reads the diff cold (the `code-review` skill). Fix blocking findings; answer optional
    ones in one line.
-4. Mark ready and enable auto-merge (squash). A red check is fixed, not waited out.
+4. Mark ready and enable auto-merge (squash), except where "Autonomy by path" below says the owner merges. A red check is
+   fixed, not waited out.
 
 **Stop and ask the owner** when an Issue has an open question, a change would contradict a decision recorded in an Issue,
 or anything involves money, a card, AWS, secrets, repository settings or permissions, or deleting data.
@@ -64,9 +65,9 @@ or anything involves money, a card, AWS, secrets, repository settings or permiss
 ### Autonomy by path
 
 Until the kind deploy check is a required check, do not enable auto-merge on a PR that touches `deploy/` (the pins bot
-excepted): mark it ready and stop. PRs that touch `.github/`, `.claude/`, `CLAUDE.md`, `mise.toml`, `mise.lock` or
-`scripts/check` are always merged by the owner. Docs and `app/` dependency bumps auto-merge as usual. This is a
-convention, not a control, until agents have their own GitHub identity.
+excepted): mark it ready and stop. PRs that touch `.github/`, `.claude/`, `.githooks/`, `.mcp.json`, `.trivyignore.yaml`,
+`CLAUDE.md`, `mise.toml`, `mise.lock` or `scripts/` are always merged by the owner. Docs and `app/` changes auto-merge
+once `check` and `build` are green. This is a convention, not a control, until agents have their own GitHub identity.
 
 ## Evidence
 
