@@ -1,6 +1,23 @@
 {
   "permissions": {
-    "deny": ["Read(~/.aws/**)", "Bash(aws *)"]
+    "deny": [
+      "Read(~/.aws/**)",
+      "Bash(aws *)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git push * --force*)",
+      "Bash(git push * -f)",
+      "Bash(git push --no-verify*)",
+      "Bash(git commit --no-verify*)",
+      "Bash(git commit * --no-verify*)",
+      "Bash(git commit -n *)",
+      "Bash(gh pr merge * --admin*)",
+      "Bash(gh api * protection*)",
+      "Bash(gh api * secrets*)",
+      "Bash(gh secret *)",
+      "Bash(gh repo edit *)",
+      "Bash(gh repo delete *)"
+    ]
   },
   "sandbox": {
     "filesystem": {

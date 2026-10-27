@@ -1,0 +1,15 @@
+name: Question
+description: A decision or fact that blocks work
+labels: ["needs-info"]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: The question
+      description: One question, with the options and a recommended answer.
+    validations:
+      required: true
+  - type: textarea
+    id: blocks
+    attributes:
+      label: What it blocks
