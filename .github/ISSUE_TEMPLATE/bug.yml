@@ -1,0 +1,23 @@
+name: Bug
+description: Something that worked, or should work, does not
+labels: ["needs-triage"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Command output, a failing run link, or the commit where it started.
+    validations:
+      required: true

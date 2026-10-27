@@ -42,10 +42,32 @@ A shop (Google's Online Boutique, vendored in `app/`) delivered to Kubernetes by
 2. Open a draft PR and subscribe to its activity.
 3. Review with a separate pass that reads the diff cold (the `code-review` skill). Fix blocking findings; answer optional
    ones in one line.
-4. Mark ready and enable auto-merge (squash). A red check is fixed, not waited out.
+4. Mark ready and enable auto-merge (squash), except where "Autonomy by path" below says the owner merges. A red check is
+   fixed, not waited out.
 
 **Stop and ask the owner** when an Issue has an open question, a change would contradict a decision recorded in an Issue,
 or anything involves money, a card, AWS, secrets, repository settings or permissions, or deleting data.
+
+## Issues and parallel work
+
+- Work comes from Issues. A new Issue is `needs-triage`. A triage pass (the `triage` skill, at the start of a session)
+  proposes label, milestone, size ("fits one PR?"), duplicates and `Blocked by`; the owner confirms. An agent that needs
+  an answer posts one question and sets `needs-info`. Work found outside an Issue's scope becomes a new `needs-triage`
+  Issue, not a bigger PR.
+- A work Issue states Goal, Done when (with a planted fault where it fits), the paths it will touch, Blocked by, Out of
+  scope. Labels: `ready-for-agent` (safe to run unattended), `ready-for-human`, `blocked`, `in-progress`, one `area:*`.
+- At most 3 Issues are `in-progress`. Two in-progress Issues may not touch the same paths unless one is `Blocked by` the
+  other. One owner per Issue, each in its own branch and git worktree. A PR closes its Issue with `Closes #N`.
+- When you stop, post a handoff comment on the Issue: Done, Evidence, Next, Blockers, Surprises.
+- Never turn a red check green by weakening it (a new accepted-findings entry, a loosened threshold, a skipped test)
+  without the owner's approval.
+
+### Autonomy by path
+
+Until the kind deploy check is a required check, do not enable auto-merge on a PR that touches `deploy/` (the pins bot
+excepted): mark it ready and stop. PRs that touch `.github/`, `.claude/`, `.githooks/`, `.mcp.json`, `.trivyignore.yaml`,
+`CLAUDE.md`, `mise.toml`, `mise.lock` or `scripts/` are always merged by the owner. Docs and `app/` changes auto-merge
+once `check` and `build` are green. This is a convention, not a control, until agents have their own GitHub identity.
 
 ## Evidence
 
